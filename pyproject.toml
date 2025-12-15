@@ -1,0 +1,69 @@
+[project]
+name = "ferocia-takehome"
+version = "0.1.0"
+description = "Ferocia take-home exercise"
+readme = "README.md"
+authors = [
+    { name = "Jun Yang", email = "handsomeyang@gmail.com" }
+]
+requires-python = ">=3.12, <3.14"
+dependencies = [
+    "colorama>=0.4.6",
+    "fastapi>=0.124.2",
+    "joblib>=1.5.2",
+    "pandas>=2.3.3",
+    "pydantic>=2.12.5",
+    "scikit-learn>=1.8.0",
+    "uvicorn>=0.38.0",
+    "xgboost>=3.1.2",
+]
+
+[project.scripts]
+train = "trainer.train:main"
+serve = "api_server.serve:main"
+query = "api_server.query:main"
+
+[build-system]
+requires = ["uv_build>=0.9.12,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "bandit>=1.9.2",
+    "jupyter>=1.1.1",
+    "mypy>=1.19.0",
+    "pre-commit>=4.5.0",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.8",
+    "types-requests>=2.32.4.20250913",
+    "typing-extensions>=4.15.0",
+]
+
+[tool.uv.build-backend]
+module-name = ["trainer", "utils", "api_server"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+    "--cov=src",
+    "--cov-report=xml"
+]
+
+[tool.coverage.run]
+source = ["src"]
+
+#[tool.coverage.report]
+#fail_under = 80
+
+[tool.mypy]
+strict = true
+files = ["src"]
+exclude = ["tests"]
+ignore_missing_imports = true
+disallow_untyped_decorators = false
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]

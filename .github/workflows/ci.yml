@@ -1,0 +1,51 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  quality-check:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install Dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Lint with Ruff
+        run: uv run ruff check
+
+      - name: Check Formatting
+        run: uv run ruff format --check
+
+      - name: Security Scan (Bandit)
+        run: uv run bandit -r . -c pyproject.toml -ll
+
+      - name: Run Mypy Type Checker
+        run: uv run mypy
+
+      - name: Run Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Run Unit Tests
+        run: uv run pytest
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
