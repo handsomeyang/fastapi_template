@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-numerical_features = [
+NUMERICAL_FEATURES = [
     "age",
     "balance",
     "day",
@@ -12,7 +12,7 @@ numerical_features = [
     "previous",
 ]
 
-categorical_features = [
+CATEGORICAL_FEATURES = [
     "job",
     "marital",
     "education",
@@ -21,9 +21,9 @@ categorical_features = [
     "poutcome",
 ]
 
-binary_features = ["default", "housing", "loan"]
+BINARY_FEATURES = ["default", "housing", "loan"]
 
-training_features = [
+TRAINING_FEATURES = [
     "age",
     "job",
     "marital",
@@ -53,8 +53,11 @@ def get_project_root() -> Path:
     raise RuntimeError("Project root not found.")
 
 
+PROJECT_ROOT = get_project_root()
+
+
 def get_data_dir() -> Path:
-    data_dir = get_project_root() / "data"
+    data_dir = PROJECT_ROOT / "data"
 
     if data_dir.exists():
         return data_dir
@@ -63,12 +66,21 @@ def get_data_dir() -> Path:
 
 
 def get_artifacts_dir() -> Path:
-    artifacts_dir = get_project_root() / "artifacts"
+    artifacts_dir = PROJECT_ROOT / "artifacts"
 
     if artifacts_dir.exists():
         return artifacts_dir
 
     raise RuntimeError("Artifacts dir not found.")
+
+
+def get_config_dir() -> Path:
+    config_dir = PROJECT_ROOT / "config"
+
+    if config_dir.exists():
+        return config_dir
+
+    raise RuntimeError("Config dir not found.")
 
 
 def encode_binary_features(df: pd.DataFrame, binary_features: list[str]) -> None:

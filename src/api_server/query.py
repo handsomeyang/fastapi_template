@@ -4,17 +4,20 @@ import requests
 import pandas as pd
 from utils import get_data_dir
 from colorama import init, Fore, Style
+from .settings import get_settings
 
 
 init()
 
 
 def main() -> None:
+    settings = get_settings()
+
     parser = argparse.ArgumentParser(
         description="Query the term subscription prediction endpoint."
     )
-    parser.add_argument("--host", default="127.0.0.1", help="API server address.")
-    parser.add_argument("--port", type=int, default=8000, help="API server port.")
+    parser.add_argument("--host", default=settings.HOST, help="API server address.")
+    parser.add_argument("--port", type=int, default=settings.PORT, help="API server port.")
     parser.add_argument("--data", help="Customer data in JSON string format.")
 
     args = parser.parse_args()

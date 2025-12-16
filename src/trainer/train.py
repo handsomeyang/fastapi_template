@@ -17,9 +17,9 @@ from utils import (
     get_data_dir,
     get_artifacts_dir,
     encode_binary_features,
-    numerical_features,
-    categorical_features,
-    binary_features,
+    NUMERICAL_FEATURES,
+    CATEGORICAL_FEATURES,
+    BINARY_FEATURES,
 )
 from colorama import init, Fore, Style
 
@@ -47,10 +47,10 @@ def main() -> None:
     df = pd.read_csv(get_data_dir() / "dataset.csv", sep=";")
 
     with open(get_artifacts_dir() / "binary_features.json", "w") as f:
-        json.dump(binary_features, f)
+        json.dump(BINARY_FEATURES, f)
 
     print("Encoding binary features")
-    encode_binary_features(df, binary_features + ["y"])
+    encode_binary_features(df, BINARY_FEATURES + ["y"])
 
     print("Creating data processor (numerical features + categorical features)")
     # Define data processor:
@@ -62,12 +62,12 @@ def main() -> None:
             (
                 "num",
                 StandardScaler(),
-                numerical_features,
+                NUMERICAL_FEATURES,
             ),
             (
                 "cat",
                 OneHotEncoder(handle_unknown="ignore", sparse_output=False),
-                categorical_features,
+                CATEGORICAL_FEATURES,
             ),
         ],
         remainder="passthrough",
