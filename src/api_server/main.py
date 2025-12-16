@@ -1,4 +1,3 @@
-import sys
 import json
 import joblib
 from typing import AsyncIterator

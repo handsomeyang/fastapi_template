@@ -1,3 +1,4 @@
+from typing import Any
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
 import pathlib
@@ -11,7 +12,7 @@ class AppSettings(BaseSettings):
     WORKERS: int = 4
 
     model_config = SettingsConfigDict(
-        env_file_encoding='utf-8',
+        env_file_encoding="utf-8",
         env_prefix="APP_",
     )
 
@@ -46,7 +47,7 @@ def _determine_env_files(app_env: str) -> list[pathlib.Path]:
     return env_files
 
 
-def load_settings(**kwargs) -> AppSettings:
+def load_settings(**kwargs: Any) -> AppSettings:
     """
     The ONLY place where settings are instantiated and resolved.
     This function must be called exactly once by run_server.py.
@@ -57,7 +58,11 @@ def load_settings(**kwargs) -> AppSettings:
         # Prevent re-instantiation
         return APP_SETTINGS_INSTANCE
 
-    app_env = kwargs.get('ENV') or os.environ.get("APP_ENV") or AppSettings.model_fields['ENV'].default
+    app_env = (
+        kwargs.get("ENV")
+        or os.environ.get("APP_ENV")
+        or AppSettings.model_fields["ENV"].default
+    )
     resolved_env_files = _determine_env_files(app_env)
     print(f"Loading configuration files for '{app_env}': {resolved_env_files}")
 
@@ -65,7 +70,7 @@ def load_settings(**kwargs) -> AppSettings:
     config_dict = AppSettings.model_config.copy()
 
     # Add the dynamically resolved env_file list to the configuration
-    config_dict['env_file'] = resolved_env_files
+    config_dict["env_file"] = resolved_env_files
 
     # Create a temporary BaseSettings class using the original fields
     # and the new configuration dictionary.

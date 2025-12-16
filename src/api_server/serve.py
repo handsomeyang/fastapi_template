@@ -1,6 +1,4 @@
-import os
 import argparse
-import uvicorn
 from .setup_logging import load_logging_config, setup_logging
 from .settings import load_settings
 
@@ -11,11 +9,9 @@ def main() -> None:
     )
     parser.add_argument("--host", help="Host IP to bind to.")
     parser.add_argument("--port", type=int, help="Port to listen on.")
+    parser.add_argument("--workers", type=int, help="Number of worker processes.")
     parser.add_argument(
-        "--workers", type=int, help="Number of worker processes."
-    )
-    parser.add_argument(
-        "--env", choices=['dev', 'staging', 'prod'], help="Deployment environment."
+        "--env", choices=["dev", "staging", "prod"], help="Deployment environment."
     )
 
     args = parser.parse_args()

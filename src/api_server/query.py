@@ -17,7 +17,9 @@ def main() -> None:
         description="Query the term subscription prediction endpoint."
     )
     parser.add_argument("--host", default=settings.HOST, help="API server address.")
-    parser.add_argument("--port", type=int, default=settings.PORT, help="API server port.")
+    parser.add_argument(
+        "--port", type=int, default=settings.PORT, help="API server port."
+    )
     parser.add_argument("--data", help="Customer data in JSON string format.")
 
     args = parser.parse_args()
