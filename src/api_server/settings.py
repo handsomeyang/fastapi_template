@@ -36,9 +36,9 @@ def _determine_env_files(app_env: str) -> list[pathlib.Path]:
 
     # 1. Add the environment-specific file
     if app_env == "dev":
-        env_files.append(PROJECT_ROOT / "config" / "dev.env")
+        env_files.append(PROJECT_ROOT / "config" / ".env.dev")
     elif app_env == "staging":
-        env_files.append(PROJECT_ROOT / "config" / "staging.env")
+        env_files.append(PROJECT_ROOT / "config" / ".env.staging")
     # Production uses OS ENV only, so no file added here.
 
     # 2. Add the local override file (highest file precedence)
